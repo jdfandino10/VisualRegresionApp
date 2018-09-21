@@ -22,12 +22,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/runtest', (req, res) => {
-  console.log('run cypress');
   cypress.run({
     spec: './cypress/integration/color_pallete.js'
   })
   .then((results) => {
-    console.log(results);
     regression(res);
   })
   .catch((err) => {
@@ -38,7 +36,6 @@ app.get('/runtest', (req, res) => {
 
 app.get('/tests', (req, res) => {
   let cursor = db.collection('visual_reg_taller').find().toArray((err, results) => {
-    console.log(results);
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(results));
   });
@@ -52,8 +49,6 @@ function regression(res) {
 
   resemble(img1).compareTo(img2)
   .onComplete((data) => {
-    console.log('done:');
-    console.log(data);
     fs.writeFile("./output.png", data.getBuffer(), () => {
       let currTime = new Date().getTime();
       let nImg1 = currTime + ".png";
