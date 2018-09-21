@@ -2,15 +2,26 @@ console.log('hola');
 // TODO: call /runtest and reload page when done
 
 $('#generar').on('click', () => {
+  showLoading();
   $.get('runtest', (data) => {
     console.log(data);
     getData();
   });
 });
 
+function showLoading() {
+  $('#loading').attr('style', 'display: default;');
+  $('#generar').attr('disabled', 'true');
+}
+
+function hideLoading() {
+  $('#loading').attr('style', 'display: none;');
+  $('#generar').removeAttr('disabled');
+}
 
 function getData() {
   $.get('tests', (data) => {
+    data = data.reverse();
     console.log(data);
     let str = '<tr>';
     for (let i in data) {
@@ -29,6 +40,7 @@ function getData() {
     }
     str += '</tr>';
     $('#resultados').html(str);
+    hideLoading();
   });
 }
 
